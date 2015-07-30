@@ -30,9 +30,11 @@ class GitPriorityMerge(object):
             raise TypeError('Not in a git repository')
 
         self.base_branch = base_branch or self.repo.active_branch.name
-        self.branch_file = branch_file
-        self.branches = branches
-        self.remotes = ['origin']  # TODO: Make this a flexible list.
+        self.branch_file = branch_file or branches
+        try:
+            self.remote = self.repo.remotes[0]
+        except IndexError:
+            raise IndexError('No remotes were found')
         '''
         if not self.branch_file or self.branches:
             raise ValueError('Need either a file of branch names or a list of branches')
@@ -40,6 +42,28 @@ class GitPriorityMerge(object):
 
     def fetch(self):
         print self.repo.git.fetch(all=True)
+
+    @property
+    def branches(self):
+        return self._branches if hasattr(self, '_branches') else []
+
+    @branches.setter
+    def branches(self, branches=None):
+        self._branches = []
+        # File name
+        if isinstance(branches, str):
+            with open(braches, 'r') as f:
+                self._branches = [l.strip() for l in f]
+        elif isinstance(branches, list):
+            self._branches = branches
+
+    def refresh_branches(self):
+        remote_name = self.remote.name
+        branch_names = [b.name for b in self.repo.branches]
+        remote_branch_names = [b.name for b in self.remote.refs]
+        for b in branch_names:
+            if
+        pass
 
 
 
