@@ -124,7 +124,6 @@ class GitPriorityMerge(object):
         return True
 
 
-
 def parse_args():
     parser = argparse.ArgumentParser(description='Merge several branches in order')
     parser.add_argument('-b', '--base', default=None, help='Branch to use as base.')
